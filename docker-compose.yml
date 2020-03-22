@@ -1,0 +1,60 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  # apigw:
+  #   container_name: 'apigw'
+  #   image: traefik:alpine #The official Traefik docker image
+  #   command: --api --docker #Enables the web UI and tells Træfik to listen to docker
+  #   ports:
+  #     - "80:80"     #The HTTP port
+  #     - "443:443"
+  #     - "8080:8080" #The Web UI (enabled by --api)
+  #   # labels:
+  #   #   - "traefik.domain=example.com"
+  #   #   - "traefik.frontend.rule=Host:example.com"
+  #   # depends_on:
+  #   #   - app
+  #   #   - staticfile
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock #So that Traefik can listen to the Docker events
+  #     - ./traefik.toml:/etc/traefik/traefik.toml
+  #     - ./acme.json:/acme.json
+  #   healthcheck:
+  #     test: ["CMD", "traefik", "healthcheck"]
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 3
+  #   restart: always
+
+  forum:
+    image: ubuntu-tw-www
+    restart: always
+    volumes:
+      - /data/docker/www/data:/var/www/
+      - /data/docker/www/letsencrypt:/etc/letsencrypt
+      - /data/docker/www/dhparam.pem:/etc/ssl/certs/dhparam.pem
+      - /data/docker/www/lighttpd/:/etc/lighttpd
+    ports:
+      - 80:80
+      - 443:443
+
+  db:
+    image: mariadb
+    restart: always
+    env_file: 'docker.env'
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - /data/docker/db/data:/var/lib/mysql
+    command: '--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
+
+  adminer:
+    image: adminer
+    restart: always
+    labels:
+      - "traefik.enable=false"
+    ports:
+      - 8080:8080
+
