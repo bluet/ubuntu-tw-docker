@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:18.04
 LABEL      maintainer="BlueT - Matthew Lien - 練喆明 <bluet@bluet.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
