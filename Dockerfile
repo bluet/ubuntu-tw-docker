@@ -1,9 +1,9 @@
-FROM ubuntu:bionic
+FROM ubuntu:24.04
 LABEL      maintainer="BlueT - Matthew Lien - 練喆明 <bluet@bluet.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 
-COPY sources.list.bionic /etc/apt/sources.list
+COPY sources.list.noble /etc/apt/sources.list
 ADD entrypoint.sh /entrypoint.sh
 
 RUN echo "Asia/Taipei" > /etc/timezone && \
